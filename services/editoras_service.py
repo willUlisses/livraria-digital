@@ -1,0 +1,38 @@
+from config.connection import criar_conexao
+
+def inserir_editora(nome: str, cidade: str):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "INSERT INTO editoras(nome, cidade) VALUES (%s, %s)"
+        cursor.execute(sql, (nome, cidade))
+        conn.commit()
+        print(f"\nEditora {nome} inserida com sucesso no banco!")
+    except Exception as e:
+        print(f"\nErro ao inserir nova editora: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+    
+
+def remover_editora_por_id(id_editora: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = f"DELETE FROM editoras WHERE id_editora = {id_editora}"
+        cursor.execute(sql, (id_editora))
+        conn.commit()
+        print("\nEditora removida do banco com sucesso!")
+    except Exception as e:
+        print(f"Erro ao remover editora: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+    
+def alterar_editora():
+    pass
+
+def listar_editoras():
+    pass

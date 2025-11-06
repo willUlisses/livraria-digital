@@ -1,0 +1,29 @@
+from config.connection import criar_conexao
+
+def inserir_autor(nome: str, nacionalidade: str):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "INSERT INTO autores (nome, nacionalidade) VALUES (%s, %s)"
+        cursor.execute(sql, (nome, nacionalidade))
+        conn.commit()
+        print(f"\O autor {nome} foi inserido com sucesso no banco!")
+    except Exception as e:
+        print(f"Erro ao inserir novo autor: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def remover_autor_por_id(id_autor: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "DELETE FROM autores WHERE id_autor = %d"
+        cursor.execute(sql, (id_autor))
+        conn.commit()
+        print("\nAutor removido do banco com sucesso!")
+    except Exception as e:
+        print(f"\nErro ao remover autor: {e}")
+    finally:
+        cursor.close()
+        conn.close()
