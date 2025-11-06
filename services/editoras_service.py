@@ -29,8 +29,19 @@ def remover_editora_por_id(id_editora: int):
         conn.close()
 
     
-def alterar_editora():
-    pass
+def alterar_editora(nome, id_editora):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "ALTER TABLE editoras SET nome = %s WHERE id_editora = %s"
+        cursor.execute(sql, (nome, id_editora))
+        conn.commit()
+        print(f"\nNome da editora alterado para: {nome}")
+    except Exception as e:
+        print(f"Erro ao alterar editora: {e}")
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def listar_editoras():
