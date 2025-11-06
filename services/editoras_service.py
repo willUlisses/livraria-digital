@@ -29,7 +29,7 @@ def remover_editora_por_id(id_editora: int):
         conn.close()
 
     
-def alterar_editora(nome, id_editora):
+def alterar_nome_editora(nome, id_editora):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
@@ -57,3 +57,4 @@ def listar_editoras():
     finally:
         cursor.close()
         conn.close()
+
