@@ -14,8 +14,6 @@ def inserir_editora(nome: str, cidade: str):
         cursor.close()
         conn.close()
 
-    
-
 def remover_editora_por_id(id_editora: int):
     conn = criar_conexao()
     try:
@@ -34,5 +32,17 @@ def remover_editora_por_id(id_editora: int):
 def alterar_editora():
     pass
 
+
 def listar_editoras():
-    pass
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT nome FROM editoras"
+        cursor.execute(sql)
+        editoras = cursor.fetchall()
+        return editoras
+    except Exception as e:
+        print(f"\nErro ao listar editoras: {e}")
+    finally:
+        cursor.close()
+        conn.close()

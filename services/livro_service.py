@@ -35,7 +35,7 @@ def alterar_livro(id_livro: int): # apenas para ADMIN
     pass
 
 ## ------------------------------------------------ listar livros do user logado
-def listar_livros(): # tanto pra USER quanto Pra ADMIN
+def listar_livros(): # tanto pra USER quanto pra ADMIN
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
