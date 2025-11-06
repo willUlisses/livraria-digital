@@ -31,8 +31,20 @@ def remover_livro_por_id(id_livro: int): # tirar dúvida sobre por ou não por p
         conn.close()
 
 ## --------------------------------------------- alterar algo em um livro
-def alterar_livro(id_livro: int): # apenas para ADMIN
-    pass
+def alterar__titulo_livro(titulo: str, id_livro: int): # apenas para ADMIN
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "UPDATE livros SET titulo = %s WHERE id_livro = %s"
+        cursor.execute(sql, (titulo, id_livro))
+        conn.commit()
+        print(f"O livro foi alterado com sucesso")
+    except Exception as e:
+        print(f"Erro ao alterar título do livro: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+    
 
 ## ------------------------------------------------ listar livros do user logado
 def listar_livros(): # tanto pra USER quanto pra ADMIN
