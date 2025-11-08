@@ -29,3 +29,21 @@ def login(email: str, senha: str):
     finally:
         cursor.close()
         conn.close()
+
+
+def valida_registro(email: str):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT email FROM clientes c WHERE email = %s"
+        cursor.execute(sql, (email,))
+        cliente = cursor.fetchone()
+        if cliente:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f"Não foi possível conectar-se ao banco: {e}")
+    finally:
+        cursor.close()
+        conn.close()

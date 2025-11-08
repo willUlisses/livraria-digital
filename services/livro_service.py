@@ -44,7 +44,6 @@ def alterar__titulo_livro(titulo: str, id_livro: int): # apenas para ADMIN
     finally:
         cursor.close()
         conn.close()
-    
 
 ## ------------------------------------------------ listar livros do user logado
 def listar_livros(): # tanto pra USER quanto pra ADMIN
