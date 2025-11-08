@@ -8,7 +8,7 @@ def registrar(email: str, senha: str, telefone: str):
         sql = "INSERT INTO clientes (email, senha, telefone) VALUES (%s, %s, %s)"
         cursor.execute(sql, (email, senha, telefone))
         conn.commit()
-        print(f"Cliente Adicionado com sucesso")
+        print(f"Cliente com email: {email} registrado com sucesso")
     except Exception as e:
         print(f"Erro ao registrar-se: {e}")
     finally:

@@ -12,10 +12,13 @@ while True:
         print("Informe seus dados\n")
         email = input("Email: ")
         senha = pwinput("Senha: ")
+        telefone = input("Telefone: ")
         ja_existe = valida_registro(email)
+
         if ja_existe:
             print(f"\nO email {email} já está cadastrado\n")
-            break
+            continue
+        registrar(email, senha, telefone)
     elif login_option == 2:
         pass
     elif login_option == 3:
