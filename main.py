@@ -1,5 +1,5 @@
 from views.user_view import *
-from getpass import getpass
+from pwinput import pwinput
 from services.cliente_service import *
 
 while True:
@@ -11,7 +11,7 @@ while True:
     if login_option == 1:
         print("Informe seus dados\n")
         email = input("Email: ")
-        senha = getpass("Senha: ")
+        senha = pwinput("Senha: ")
         ja_existe = valida_registro(email)
         if ja_existe:
             print(f"\nO email {email} já está cadastrado\n")
