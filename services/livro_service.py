@@ -46,13 +46,30 @@ def alterar__titulo_livro(titulo: str, id_livro: int): # apenas para ADMIN
         conn.close()
 
 ## ------------------------------------------------ listar livros do user logado
-def listar_livros(): # tanto pra USER quanto pra ADMIN
+def listar_todos_livros(): # tanto pra USER quanto pra ADMIN
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "..." 
+        sql = "SELECT l.titulo FROM livros l" 
         cursor.execute(sql)
         conn.commit()
+        livros = cursor.fetchall()
+        return livros
+    except Exception as e:
+        print(f"Erro ao listar livros: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def listar_livros_usuario(id_usuario_logado):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT l.titulo FROM clientes c JOIN vendas v on c.id_cliente = v.id_cliente JOIN itens_venda iv on v.id_venda = iv.id_venda JOIN livros l on iv.id_livro = l.id_livro WHERE c.id_cliente = %s"
+        cursor.execute(sql, (id_usuario_logado,))
+        conn.commit()
+        livros_cliente = cursor.fetchall()
+        return livros_cliente
     except Exception as e:
         print(f"Erro ao listar livros: {e}")
     finally:
