@@ -61,7 +61,7 @@ def listar_todos_livros(): # tanto pra USER quanto pra ADMIN
         cursor.close()
         conn.close()
 
-def listar_livros_usuario(id_usuario_logado):
+def listar_livros_usuario(id_usuario_logado: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
@@ -72,6 +72,21 @@ def listar_livros_usuario(id_usuario_logado):
         return livros_cliente
     except Exception as e:
         print(f"Erro ao listar livros: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def buscar_livro_por_nome(titulo: str) -> str:
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT l.id_livro, l.titulo FROM livros WHERE l.titulo LIKE %s%"
+        cursor.execute(sql, (titulo,))
+        conn.commit()
+        resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        print(f"Erro ao tentar buscar livro: {e}")
     finally:
         cursor.close()
         conn.close()
