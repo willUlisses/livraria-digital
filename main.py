@@ -54,7 +54,7 @@ while True:
         while True:
             user_options_panel()
             try:
-                user_option = int(input("Informe sua opçao:"))
+                user_option = int(input("Informe sua opçao: "))
             except ValueError:
                 print("\nInforme apenas o número da escolha.")
                 continue
@@ -71,21 +71,29 @@ while True:
                 titulo_de_busca = input("Pesquisar: ")
                 resultados = buscar_livro_por_nome(titulo_de_busca)
                 if resultados:
-                    print("Resultados possíveis:\n")
+                    print("Resultados:\n")
                     for livro in resultados:
-                        time.sleep(3)
+                        time.sleep(0.5)
                         print("------------------")
                         print(f"{livro[0]} -> {livro[1]}")
+                        print("------------------")
+                    input("\nPressione qualquer tecla para voltar ao menu...\n")
+                    os.system("cls")
                 else:
                     print("Não foi possível encontrar livros correspondentes")
+                    input("\nPressione qualquer tecla para voltar ao menu\n")
+                    os.system("cls")
             elif user_option == 3:
                 os.system("cls")
-                livros_cliente = listar_livros_usuario()
+                livros_cliente = listar_livros_usuario(user_logged[0])
                 if livros_cliente:
                     print("Livros da sua coleção: \n")
                     for livro in livros_cliente:
                         print("------------------")
                         print(livro[0])
+                        print("------------------")
                 else:
                     print("Você ainda não possui livros na sua coleção")
+                    input("\nPressione qualquer tecla para voltar ao menu...\n")
+                    os.system("cls")
             
