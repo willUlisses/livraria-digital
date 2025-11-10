@@ -80,9 +80,9 @@ def buscar_livro_por_nome(titulo: str) -> str:
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT l.id_livro, l.titulo FROM livros WHERE l.titulo LIKE '%s%'"
-        cursor.execute(sql, (titulo,))
-        conn.commit()
+        titulo_busca = f"%{titulo}%"
+        sql = "SELECT l.id_livro, l.titulo FROM livros l WHERE l.titulo ILIKE %s"
+        cursor.execute(sql, (titulo_busca,))
         resultados = cursor.fetchall()
         return resultados
     except Exception as e:
