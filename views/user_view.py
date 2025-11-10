@@ -4,11 +4,11 @@ def login_user_panel():
     print("\n1 - Registrar-se\n2 - Entrar\n3 - Sair")
 
 def user_options_panel():
-    print("O que Deseja Fazer?\n")
+    print("=== MENU DO USUARIO\n")
     print("1- Comprar um Livro\n2 - Buscar Livro\n3 - Listar Seus Livros")
 
 def admin_option_panel():
-    print("BEM VINDO!\nQual setor deseja modificar?\n")
+    print("BEM VINDO!\n")
     print("1 - Livros\n2 - Editoras\n3 - Autores\n4 - Vendas") #considerar opção para atuar com clientes
 
 def admin_livros_panel():
