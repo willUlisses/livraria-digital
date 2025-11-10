@@ -20,8 +20,8 @@ def remover_livro_por_id(id_livro: int): # tirar dúvida sobre por ou não por p
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = f"DELETE FROM livros WHERE id_livro = {id_livro}"
-        cursor.execute(sql, (id_livro))
+        sql = "DELETE FROM livros WHERE id_livro = %d"
+        cursor.execute(sql, (id_livro,))
         conn.commit()
         print("Livro removido com sucesso!")
     except Exception as e:
@@ -80,7 +80,7 @@ def buscar_livro_por_nome(titulo: str) -> str:
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT l.id_livro, l.titulo FROM livros WHERE l.titulo LIKE %s%"
+        sql = "SELECT l.id_livro, l.titulo FROM livros WHERE l.titulo LIKE '%s%'"
         cursor.execute(sql, (titulo,))
         conn.commit()
         resultados = cursor.fetchall()
