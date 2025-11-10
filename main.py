@@ -1,6 +1,7 @@
 from views.user_view import *
 from pwinput import pwinput
 from services.cliente_service import *
+from services.livro_service import *
 import os
 import sys
 import time
@@ -48,7 +49,43 @@ while True:
 while True:
     if user_logged[0] == 1: ##para o caso de ser admin
         admin_option_panel()
+        break
     else: #para o caso de ser um usuário normal
-        user_options_panel()
-        
-
+        while True:
+            user_options_panel()
+            try:
+                user_option = int(input("Informe sua opçao:"))
+            except ValueError:
+                print("\nInforme apenas o número da escolha.")
+                continue
+            
+            if user_option == 1:
+                #entrar num loop que abre um menu de compra de livros
+                #primeiro exibe a lista de livros DISPONÍVEIS (adicionar coluna de disponibilidade e tirar quantidade nos livros)
+                #depois escolhemos o livro pra comprar pelo id dele e então ou diminuimos a quantidade dele no banco ou tornamos ele indisponível
+                #ao escolher um livro inserimos o cliente que comprou (usuario logado) na tabela de vendas
+                #depois adicionamos o id do livro comprado na tabela de itens_venda com o id da venda que acabou de ser feita -> tirar duvida sobre isso
+                pass
+            elif user_option == 2:
+                os.system("cls")
+                titulo_de_busca = input("Pesquisar: ")
+                resultados = buscar_livro_por_nome(titulo_de_busca)
+                if resultados:
+                    print("Resultados possíveis:\n")
+                    for livro in resultados:
+                        time.sleep(3)
+                        print("------------------")
+                        print(f"{livro[0]} -> {livro[1]}")
+                else:
+                    print("Não foi possível encontrar livros correspondentes")
+            elif user_option == 3:
+                os.system("cls")
+                livros_cliente = listar_livros_usuario()
+                if livros_cliente:
+                    print("Livros da sua coleção: \n")
+                    for livro in livros_cliente:
+                        print("------------------")
+                        print(livro[0])
+                else:
+                    print("Você ainda não possui livros na sua coleção")
+            
