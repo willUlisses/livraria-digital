@@ -21,7 +21,7 @@ def admin_editoras_panel():
 
 def admin_autores_panel():
     print("O que você deseja modificar nos autores?")
-    print("1 - Cadastrar novo autor\n2 - Remover um autor\n3 - Alterar nome do autor\n4 - Buscar Altor")
+    print("1 - Cadastrar novo autor\n2 - Remover um autor\n3 - Alterar nome do autor\n4 - Buscar Autor")
 
 def admin_vendas_panel():
     print("O que você deseja realizar nas vendas?")
