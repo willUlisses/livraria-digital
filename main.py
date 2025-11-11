@@ -15,21 +15,26 @@ while True:
     except ValueError:
         os.system("cls")
         print("Você pode informar as opções apenas com números.")
-        continue
+        continue    
+
     if login_option == 1:
         os.system("cls")
+
         print("Informe seus dados\n")
         email = input("Email: ")
         senha = pwinput("Senha: ")
         telefone = input("Telefone: ")
         ja_existe = valida_registro(email)
+
         if ja_existe:
             print(f"\nO email {email} já está cadastrado\n")
             continue
+
         registrar(email, senha, telefone)
+       
         os.system("cls")
         print("Agora faça o login com suas credenciais")
-        time.sleep(3)
+        time.sleep(1)
         os.system("cls")
     elif login_option == 2:
         os.system("cls")
@@ -53,8 +58,63 @@ while True:
 
 while True:
     if user_logged[1] == "admin@admin.com": ##para o caso de ser admin
-        admin_option_panel()
-        break
+        while True:
+            admin_option_panel()
+            try:
+                admin_option = int(input("\nDigite a opção: "))
+            except ValueError:
+                os.system("cls")
+                print("Você deve digitar apenas números.")
+                continue
+            if admin_option == 1:
+                os.system("cls")
+                while True:
+                    admin_livros_panel()
+                    try:
+                        livros_option = int(input("Digite sua opção: "))
+                    except ValueError:
+                        os.system("cls")
+                        print("Você deve digitar apenas números.")
+                        time.sleep(1)
+                        continue
+
+                    #match case
+            elif admin_option == 2:
+                while True:
+                    admin_editoras_panel()
+                    try:
+                        editoras_option = int(input("Digite sua opção: "))
+                    except ValueError:
+                        os.system("cls")
+                        print("Você deve digitar apenas números.")
+                        time.sleep(1)
+                        continue
+
+                    #match case
+            elif admin_option == 3:
+                while True:
+                    admin_autores_panel()
+                    try:
+                        autores_option = int(input("Digite sua opção: "))
+                    except ValueError:
+                        os.system("cls")
+                        print("Você deve digitar apenas números.")
+                        time.sleep(1)
+                        continue
+
+                    #match case
+            elif admin_option == 4:
+                while True:
+                    admin_vendas_panel()
+                    try:
+                        vendas_option = int(input("Digite sua opção: "))
+                    except ValueError:
+                        os.system("cls")
+                        print("Você deve digitar apenas números.")
+                        time.sleep(1)
+                        continue
+
+                    #match case
     else: #para o caso de ser um usuário normal
         while True:
             user_options_panel()
