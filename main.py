@@ -13,7 +13,9 @@ while True:
     try:
         login_option = int(input("Informe o que quer fazer: "))
     except ValueError:
+        os.system("cls")
         print("Você pode informar as opções apenas com números.")
+        continue
     if login_option == 1:
         os.system("cls")
         print("Informe seus dados\n")
@@ -38,16 +40,19 @@ while True:
         os.system("cls")
         break
     elif login_option == 3:
+        os.system("cls")
         print("Encerrando o sistema...")
         time.sleep(3)
         sys.exit(0)
         break
     else:
+        os.system("cls")
         print("Opção inválida, tente novamente.")
+        time.sleep(2)
         continue
 
 while True:
-    if user_logged[0] == 1: ##para o caso de ser admin
+    if user_logged[1] == "admin@admin.com": ##para o caso de ser admin
         admin_option_panel()
         break
     else: #para o caso de ser um usuário normal
