@@ -27,3 +27,18 @@ def remover_autor_por_id(id_autor: int):
     finally:
         cursor.close()
         conn.close()
+
+def buscar_autor_por_nome(nome_autor: str) -> str:
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        nome_busca = f"%{nome_autor}%"
+        sql = "SELECT a.nome FROM autores a WHERE nome LIKE %s"
+        cursor.execute(sql, (nome_busca,))
+        resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        print(f"Não foi possível buscar por autor: {e}")
+    finally:
+        cursor.close()
+        conn.close() 
