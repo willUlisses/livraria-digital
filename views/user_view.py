@@ -13,20 +13,20 @@ def admin_option_panel():
 
 def admin_livros_panel():
     print("O que você deseja modificar nos livros?\n")
-    print("1 - Adicionar um livro\n2 - Remover um livro\n3 - Modificar um livro\n4 - Buscar Livros")
+    print("1 - Adicionar um livro\n2 - Remover um livro\n3 - Modificar um livro\n4 - Buscar Livros\n5 - Voltar ao inicio")
 
 def admin_editoras_panel():
     print("O que você deseja modificar nas editoras?\n")
-    print("1 - Adicionar uma editora\n2 - Remover uma editora\n3 - Alterar nome da editora\n4 - Buscar Editoras")
+    print("1 - Adicionar uma editora\n2 - Remover uma editora\n3 - Alterar nome da editora\n4 - Buscar Editoras\n5 - Voltar ao inicio")
 
 def admin_autores_panel():
     print("O que você deseja modificar nos autores?")
-    print("1 - Cadastrar novo autor\n2 - Remover um autor\n3 - Alterar nome do autor\n4 - Buscar Autor")
+    print("1 - Cadastrar novo autor\n2 - Remover um autor\n3 - Alterar nome do autor\n4 - Buscar Autor\n5 - Voltar ao inicio")
 
 def admin_vendas_panel():
     print("O que você deseja realizar nas vendas?")
-    print("1 - Cadastrar nova venda\n2 - Listar vendas realizadas")
+    print("1 - Cadastrar nova venda\n2 - Listar vendas realizadas\n5 - Voltar ao inicio")
 
 def admin_clientes_panel():
     print("O que você deseja fazer quanto aos clientes?")
-    print("1 - Buscar por Cliente\n2 - Listar compras de um cliente")
+    print("1 - Buscar por Cliente\n2 - Listar compras de um cliente\n5 - Voltar ao inicio")
