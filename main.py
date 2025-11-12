@@ -78,7 +78,19 @@ while True:
                         time.sleep(1)
                         continue
 
-                    #match case
+                    match(livros_option):
+                        case 1:
+                            pass #Adicionar livro
+                        case 2:
+                            pass #remover livro
+                        case 3: 
+                            pass #modificar titulo do livro
+                        case 4:
+                            pass #buscar por nome do livro
+                        case _:
+                            os.system("cls")
+                            print("Digite uma opção válida.")
+                            continue
             elif admin_option == 2:
                 while True:
                     admin_editoras_panel()
@@ -90,7 +102,19 @@ while True:
                         time.sleep(1)
                         continue
 
-                    #match case
+                    match(editoras_option):
+                        case 1:
+                            pass #Adicionar 
+                        case 2:
+                            pass #remover 
+                        case 3: 
+                            pass #modificar 
+                        case 4:
+                            pass #buscar por nome 
+                        case _:
+                            os.system("cls")
+                            print("Digite uma opção válida.")
+                            continue
             elif admin_option == 3:
                 while True:
                     admin_autores_panel()
@@ -102,7 +126,19 @@ while True:
                         time.sleep(1)
                         continue
 
-                    #match case
+                    match(autores_option):
+                        case 1:
+                            pass #Adicionar 
+                        case 2:
+                            pass #remover 
+                        case 3: 
+                            pass #modificar 
+                        case 4:
+                            pass #buscar por nome 
+                        case _:
+                            os.system("cls")
+                            print("Digite uma opção válida.")
+                            continue
             elif admin_option == 4:
                 while True:
                     admin_vendas_panel()
@@ -114,7 +150,15 @@ while True:
                         time.sleep(1)
                         continue
 
-                    #match case
+                    match(vendas_option):
+                        case 1:
+                            pass #Cadastrar 
+                        case 2:
+                            pass #Listar  
+                        case _:
+                            os.system("cls")
+                            print("Digite uma opção válida.")
+                            continue
     else: #para o caso de ser um usuário normal
         while True:
             user_options_panel()
