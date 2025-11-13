@@ -2,6 +2,7 @@ from views.user_view import *
 from pwinput import pwinput
 from services.cliente_service import *
 from services.livro_service import *
+from services.editoras_service import *
 import os
 import sys
 import time
@@ -104,7 +105,12 @@ while True:
 
                     match(editoras_option):
                         case 1:
-                            pass #Adicionar 
+                            os.system("cls")
+                            print("Informe os seguintes dados da editora para cadastrá-la:\n")
+                            nome = input("Nome: ")
+                            cidade = input("Cidade: ")
+                            inserir_editora(nome, cidade)
+                            continue
                         case 2:
                             pass #remover 
                         case 3: 
@@ -125,7 +131,7 @@ while True:
                         print("Você deve digitar apenas números.")
                         time.sleep(1)
                         continue
-
+                        
                     match(autores_option):
                         case 1:
                             pass #Adicionar 
@@ -205,4 +211,3 @@ while True:
                     print("Você ainda não possui livros na sua coleção")
                     input("\nPressione qualquer tecla para voltar ao menu...\n")
                     os.system("cls")
-            
