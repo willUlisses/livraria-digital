@@ -88,3 +88,17 @@ def buscar_livro_por_nome(titulo: str) -> str:
     finally:
         cursor.close()
         conn.close()
+
+def buscar_livro_por_id(id_livro: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT l.titulo FROM livros l WHERE l.id_livro = %s"
+        cursor.execute(sql, (id_livro,))
+        resultado = cursor.fetchone()
+        return resultado
+    except Exception as e:
+        print(f"Erro ao buscar livro por id: {e}")
+    finally:
+        cursor.close()
+        conn.close()
