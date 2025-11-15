@@ -3,9 +3,11 @@ from pwinput import pwinput
 from services.cliente_service import *
 from services.livro_service import *
 from services.editoras_service import *
+from services.vendas_service import *
 import os
 import sys
 import time
+from datetime import date, datetime
 
 user_logged = None
 
@@ -93,6 +95,7 @@ while True:
                             print("Digite uma opção válida.")
                             continue
             elif admin_option == 2:
+                os.system("cls")
                 while True:
                     admin_editoras_panel()
                     try:
@@ -102,7 +105,7 @@ while True:
                         print("Você deve digitar apenas números.")
                         time.sleep(1)
                         continue
-
+                        
                     match(editoras_option):
                         case 1:
                             os.system("cls")
@@ -116,7 +119,10 @@ while True:
                         case 3: 
                             pass #modificar 
                         case 4:
-                            pass #buscar por nome 
+                            pass #buscar por nome
+                        case 5:
+                            os.system("cls")
+                            break 
                         case _:
                             os.system("cls")
                             print("Digite uma opção válida.")
@@ -155,7 +161,7 @@ while True:
                         print("Você deve digitar apenas números.")
                         time.sleep(1)
                         continue
-
+                    
                     match(vendas_option):
                         case 1:
                             pass #Cadastrar 
@@ -175,12 +181,34 @@ while True:
                 continue
             
             if user_option == 1:
-                #entrar num loop que abre um menu de compra de livros
-                #primeiro exibe a lista de livros DISPONÍVEIS (adicionar coluna de disponibilidade e tirar quantidade nos livros)
-                #depois escolhemos o livro pra comprar pelo id dele e então ou diminuimos a quantidade dele no banco ou tornamos ele indisponível
-                #ao escolher um livro inserimos o cliente que comprou (usuario logado) na tabela de vendas
-                #depois adicionamos o id do livro comprado na tabela de itens_venda com o id da venda que acabou de ser feita -> tirar duvida sobre isso
-                pass
+                os.system("cls")
+                while True:
+                    print("Aqui está a lista dos livros disponíveis:\n")
+                    time.sleep(0.5)
+                    livros_disponiveis = listar_todos_livros()
+                    
+                    for livro in livros_disponiveis:
+                        time.sleep(0.5)
+                        print("------------------")
+                        print(f"{livro[0]} -> {livro[1]}")
+                        print("------------------")
+                    
+                    try:
+                        id_livro_escolhido = int(input("\nEscolha o livro que deseja comprar pelo id dele:\n"))
+                        os.system("cls")
+                        livro_escolhido = buscar_livro_por_id(id_livro_escolhido)
+                        print(f"O livro escolhido foi: {livro_escolhido[1]}\n")
+                        quantidade = int(input("Informe quantas cópias deseja comprar: "))
+                    except ValueError:
+                        os.system("cls")
+                        print("Você deve digitar apenas valores numéricos.")
+                        continue
+                    inserir_venda(user_logged[0], date.now(), (quantidade * livro_escolhido[4]))
+                    ## procurar pelo id dessa venda que acabou de ser feita
+                    ## depois usa ele pra cadastrar o item venda e finaliza a compra 
+                    #não vai precisar do menu de continuar comprando pois já escolhe a quantidade na hora                    
+                    break 
+                
             elif user_option == 2:
                 os.system("cls")
                 titulo_de_busca = input("Pesquisar: ")
