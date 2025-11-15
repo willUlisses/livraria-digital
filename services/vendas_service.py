@@ -27,3 +27,17 @@ def listar_vendas():
     finally:
         cursor.close()
         conn.close()
+
+def cadastrar_item_venda(id_venda: int, id_livro: int, quantidade: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "INSERT INTO itens_venda(id_venda, id_livro, quantidade) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (id_venda, id_livro, quantidade))
+        conn.commit()
+        print("Cadastro bem sucedido!")
+    except Exception as e:
+        print(f"Erro ao cadastrar item na venda: {e}")
+    finally:
+        cursor.close()
+        conn.close()
