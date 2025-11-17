@@ -6,9 +6,8 @@ def inserir_venda(id_cliente: int, data_venda: str, valor_total: int) -> int:
         cursor = conn.cursor()
         sql = "INSERT INTO vendas(id_cliente, data_venda, valor_total) values (%s, %s, %s) RETURNING id_venda"
         cursor.execute(sql, (id_cliente, data_venda, valor_total))
+        id_venda_feita = cursor.fetchone()[0] #index 0 para retornar apenas o que precisamos: o id da venda feita
         conn.commit()
-        print("\nVenda cadastrada com sucesso")
-        id_venda_feita = cursor.fetchone()
         return id_venda_feita
     except Exception as e:
         print(f"Erro ao cadastrar nova venda: {e}")
@@ -38,7 +37,6 @@ def cadastrar_item_venda(id_venda: int, id_livro: int, quantidade: int):
         sql = "INSERT INTO itens_venda(id_venda, id_livro, quantidade) VALUES (%s, %s, %s)"
         cursor.execute(sql, (id_venda, id_livro, quantidade))
         conn.commit()
-        print("Cadastro bem sucedido!")
     except Exception as e:
         print(f"Erro ao cadastrar item na venda: {e}")
         conn.rollback()
