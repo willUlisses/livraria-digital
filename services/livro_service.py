@@ -50,7 +50,7 @@ def listar_todos_livros(): # tanto pra USER quanto pra ADMIN
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT l.titulo FROM livros l" 
+        sql = "SELECT id_livro, titulo, valor_unitario FROM livros" 
         cursor.execute(sql)
         livros = cursor.fetchall()
         return livros
