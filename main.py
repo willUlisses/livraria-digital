@@ -188,9 +188,9 @@ while True:
                     livros_disponiveis = listar_todos_livros()
                     
                     for livro in livros_disponiveis:
-                        time.sleep(0.5)
+                        time.sleep(0.7)
                         print("------------------")
-                        print(f"{livro[0]} -> {livro[1]}")
+                        print(f"{livro[0]} -> {livro[1]} - R${livro[2]}")
                         print("------------------")
                     
                     try:
@@ -203,10 +203,13 @@ while True:
                         os.system("cls")
                         print("Você deve digitar apenas valores numéricos.")
                         continue
-                    inserir_venda(user_logged[0], date.now(), (quantidade * livro_escolhido[4]))
-                    ## procurar pelo id dessa venda que acabou de ser feita
-                    ## depois usa ele pra cadastrar o item venda e finaliza a compra 
-                    #não vai precisar do menu de continuar comprando pois já escolhe a quantidade na hora                    
+                    valor_total = quantidade * livro_escolhido[4]
+                    id_venda_feita = inserir_venda(user_logged[0], date.now(), valor_total)
+                    cadastrar_item_venda(id_venda_feita, livro_escolhido[0], quantidade) 
+                    os.system("cls")
+                    print("Compra finalizada com sucesso, aqui estão os dados da sua compra:\n")
+                    print(f"Título: {livro_escolhido[1]}\nQuantidade: {quantidade}\nTotal: {valor_total}")
+                    input("\nPressione qualquer botão para prosseguir...")                   
                     break 
                 
             elif user_option == 2:
