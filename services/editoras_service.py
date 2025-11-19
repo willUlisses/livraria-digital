@@ -48,7 +48,7 @@ def listar_editoras():
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT nome FROM editoras"
+        sql = "SELECT id_editora, nome FROM editoras"
         cursor.execute(sql)
         editoras = cursor.fetchall()
         return editoras

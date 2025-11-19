@@ -17,7 +17,7 @@ while True:
         login_option = int(input("Informe o que quer fazer: "))
     except ValueError:
         os.system("cls")
-        print("Você pode informar as opções apenas com números.")
+        print("Você 3pode informar as opções apenas com números.")
         continue    
 
     if login_option == 1:
@@ -62,6 +62,7 @@ while True:
 while True:
     if user_logged[1] == "admin@admin.com": ##para o caso de ser admin
         while True:
+            os.system("cls")
             admin_option_panel()
             try:
                 admin_option = int(input("\nDigite a opção: "))
@@ -69,9 +70,10 @@ while True:
                 os.system("cls")
                 print("Você deve digitar apenas números.")
                 continue
-            if admin_option == 1:
+            if admin_option == 1: # ----------- Livros
                 os.system("cls")
                 while True:
+                    os.system("cls")
                     admin_livros_panel()
                     try:
                         livros_option = int(input("Digite sua opção: "))
@@ -85,18 +87,53 @@ while True:
                         case 1:
                             pass #Adicionar livro
                         case 2:
-                            pass #remover livro
+                            os.system("cls")
+                            print("Aqui está a lista dos livros disponíveis no estoque:\n")
+                            time.sleep(0.5)
+                            livros_disponiveis = listar_todos_livros()
+                            
+                            for livro in livros_disponiveis:
+                                time.sleep(0.7)
+                                print("------------------")
+                                print(f"{livro[0]} -> {livro[1]}")
+                                print("------------------")
+                            
+                            try:
+                                id_para_remover = int(input("\nInforme o identificador do livro a ser removido: "))
+                            except ValueError:
+                                os.system("cls")
+                                print("Você deve informar apenas valores númericos")
+                                input("Pressione qualquer botão para voltar ao menu")
+                                continue
+                            
+                            remover_livro_por_id(id_para_remover)
+                            continue
                         case 3: 
                             pass #modificar titulo do livro
                         case 4:
-                            pass #buscar por nome do livro
+                            os.system("cls")
+                            titulo_do_livro = input("Informe o título do livro que deseja buscar: ")
+                            resultados = buscar_livro_por_nome(titulo_do_livro)
+
+                            print("Possíveis resultados: ")
+                            for livro in resultados:
+                                time.sleep(0.7)
+                                print("------------------")
+                                print(f"Id: {livro[0]} -> Título: {livro[1]}")
+                                print("------------------")
+
+                        case 0:
+                            os.system("cls")
+                            print("Voltando para o menu inicial...")
+                            time.sleep(1.5)
+                            break
                         case _:
                             os.system("cls")
                             print("Digite uma opção válida.")
                             continue
-            elif admin_option == 2:
-                os.system("cls")
+            elif admin_option == 2: # ----------- editoras
                 while True:
+                    os.system("cls")
                     admin_editoras_panel()
                     try:
                         editoras_option = int(input("Digite sua opção: "))
@@ -115,20 +152,27 @@ while True:
                             inserir_editora(nome, cidade)
                             continue
                         case 2:
-                            pass #remover 
+                            os.system("cls") 
+                            print("Aqui estão as editoras existentes no sistema:\n")
+                            editoras_existentes = listar_editoras()
+                            time.sleep(0.7)
+                            
                         case 3: 
                             pass #modificar 
                         case 4:
                             pass #buscar por nome
-                        case 5:
+                        case 0:
                             os.system("cls")
+                            print("Voltando para o menu inicial...")
+                            time.sleep(1.5)
                             break 
                         case _:
                             os.system("cls")
                             print("Digite uma opção válida.")
                             continue
-            elif admin_option == 3:
+            elif admin_option == 3: # ----------- Autores
                 while True:
+                    os.system("cls")
                     admin_autores_panel()
                     try:
                         autores_option = int(input("Digite sua opção: "))
@@ -146,13 +190,19 @@ while True:
                         case 3: 
                             pass #modificar 
                         case 4:
-                            pass #buscar por nome 
+                            pass #buscar por nome
+                        case 0:
+                            os.system("cls")
+                            print("Voltando para o menu inicial...")
+                            time.sleep(1.5)
+                            break 
                         case _:
                             os.system("cls")
                             print("Digite uma opção válida.")
                             continue
-            elif admin_option == 4:
+            elif admin_option == 4: # ----------- Vendas
                 while True:
+                    os.system("cls")
                     admin_vendas_panel()
                     try:
                         vendas_option = int(input("Digite sua opção: "))
@@ -166,13 +216,24 @@ while True:
                         case 1:
                             pass #Cadastrar 
                         case 2:
-                            pass #Listar  
+                            pass #Listar
+                        case 0:
+                            os.system("cls")
+                            print("Voltando para o menu inicial...")
+                            time.sleep(1.5)
+                            break  
                         case _:
                             os.system("cls")
                             print("Digite uma opção válida.")
                             continue
+            elif admin_option == 0:
+                os.system("cls")
+                print("Saindo do sistema:")
+                time.sleep(1.5)
+                sys.exit(0)
     else: #para o caso de ser um usuário normal
         while True:
+            os.system("cls")
             user_options_panel()
             try:
                 user_option = int(input("Informe sua opçao: "))
@@ -194,17 +255,23 @@ while True:
                         print("------------------")
                     
                     try:
-                        id_livro_escolhido = int(input("\nEscolha o livro que deseja comprar pelo id dele:\n"))
-                        os.system("cls")
-                        livro_escolhido = buscar_livro_por_id(id_livro_escolhido)
-                        print(f"O livro escolhido foi: {livro_escolhido[1]}\n")
-                        quantidade = int(input("Informe quantas cópias deseja comprar: "))
+                        id_livro_escolhido = int(input("\nEscolha o id do livro que deseja comprar ou digite 0 para voltar ao menu:\n"))
+                        if id_livro_escolhido != 0:
+                            os.system("cls")
+                            livro_escolhido = buscar_livro_por_id(id_livro_escolhido)
+                            print(f"O livro escolhido foi: {livro_escolhido[1]}\n")
+                            quantidade = int(input("Informe quantas cópias deseja comprar: "))
+                        else:
+                            os.system("cls")
+                            print("\nVoltando ao menu inicial...")
+                            time.sleep(1.5)
+                            break
                     except ValueError:
                         os.system("cls")
                         print("Você deve digitar apenas valores numéricos.")
                         continue
-                    valor_total = quantidade * livro_escolhido[4]
-                    id_venda_feita = inserir_venda(user_logged[0], date.now(), valor_total)
+                    valor_total = quantidade * livro_escolhido[2]
+                    id_venda_feita = inserir_venda(user_logged[0], date.today(), valor_total)
                     cadastrar_item_venda(id_venda_feita, livro_escolhido[0], quantidade) 
                     os.system("cls")
                     print("Compra finalizada com sucesso, aqui estão os dados da sua compra:\n")
@@ -232,13 +299,22 @@ while True:
             elif user_option == 3:
                 os.system("cls")
                 livros_cliente = listar_livros_usuario(user_logged[0])
+                
                 if livros_cliente:
                     print("Livros da sua coleção: \n")
                     for livro in livros_cliente:
+                        time.sleep(0.7)
                         print("------------------")
-                        print(livro[0])
+                        print(f"Título: {livro[0]}")
                         print("------------------")
+                    input("\nPressione qualquer tecla para prosseguir...")
+
                 else:
-                    print("Você ainda não possui livros na sua coleção")
+                    print("Você ainda não possui livros na sua coleção.")
                     input("\nPressione qualquer tecla para voltar ao menu...\n")
                     os.system("cls")
+            elif user_option == 0:
+                os.system("cls")
+                print("Saindo do sistema:")
+                time.sleep(1.5)
+                sys.exit(0)

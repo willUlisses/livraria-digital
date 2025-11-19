@@ -20,7 +20,7 @@ def remover_livro_por_id(id_livro: int): # tirar dúvida sobre por ou não por p
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "DELETE FROM livros WHERE id_livro = %d"
+        sql = "DELETE FROM livros WHERE id_livro = %s"
         cursor.execute(sql, (id_livro,))
         conn.commit()
         print("Livro removido com sucesso!")
@@ -93,7 +93,7 @@ def buscar_livro_por_id(id_livro: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT l.titulo FROM livros l WHERE l.id_livro = %s"
+        sql = "SELECT l.id_livro, l.titulo, l.valor_unitario  FROM livros l WHERE l.id_livro = %s"
         cursor.execute(sql, (id_livro,))
         resultado = cursor.fetchone()
         return resultado
