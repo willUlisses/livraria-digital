@@ -39,7 +39,7 @@ def alterar_nome_editora(nome, id_editora):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "ALTER TABLE editoras SET nome = %s WHERE id_editora = %s"
+        sql = "UPDATE editoras SET nome = %s WHERE id_editora = %s"
         cursor.execute(sql, (nome, id_editora))
         conn.commit()
         print(f"\nNome da editora alterado para: {nome}")
@@ -64,7 +64,7 @@ def listar_editoras():
         cursor.close()
         conn.close()
 
-def buscasr_editora_por_nome(nome_editora: str):
+def buscar_editora_por_nome(nome_editora: str):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
