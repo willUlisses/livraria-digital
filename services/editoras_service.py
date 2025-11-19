@@ -1,4 +1,6 @@
 from config.connection import criar_conexao
+from psycopg2.errors import ForeignKeyViolation
+from psycopg2.errors import IntegrityError
 
 def inserir_editora(nome: str, cidade: str):
     conn = criar_conexao()
@@ -18,10 +20,14 @@ def remover_editora_por_id(id_editora: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = f"DELETE FROM editoras WHERE id_editora = {id_editora}"
-        cursor.execute(sql, (id_editora))
+        sql = "DELETE FROM editoras WHERE id_editora = %s"
+        cursor.execute(sql, (id_editora,))
         conn.commit()
         print("\nEditora removida do banco com sucesso!")
+    except ForeignKeyViolation:
+        raise ForeignKeyViolation
+    except IntegrityError:
+        print("erro de integridade")
     except Exception as e:
         print(f"Erro ao remover editora: {e}")
     finally:
@@ -57,4 +63,19 @@ def listar_editoras():
     finally:
         cursor.close()
         conn.close()
+
+def buscasr_editora_por_nome(nome_editora: str):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        nome_de_busca = f"%{nome_editora}%"
+        sql = "SELECT nome, cidade FROM editoras WHERE nome ILIKE %s"
+        cursor.execute(sql, (nome_de_busca,))
+        resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+         print(f"Erro ao buscar por editoras: {e}")
+    finally:
+        cursor.close()
+        conn.close()   
 
