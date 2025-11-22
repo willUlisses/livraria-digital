@@ -41,4 +41,18 @@ def buscar_autor_por_nome(nome_autor: str) -> str:
         print(f"Não foi possível buscar por autor: {e}")
     finally:
         cursor.close()
-        conn.close() 
+        conn.close()
+
+def listar_todos_autores():
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT id_autor, nome FROM autores"
+        cursor.execute(sql)
+        autores = cursor.fetchall()
+        return autores
+    except Exception as e:
+        print(f"Erro ao listar autores do sistema: {e}") 
+    finally:
+        cursor.close()
+        conn.close()

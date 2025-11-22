@@ -1,19 +1,35 @@
 from config.connection import criar_conexao
 
 ## ------------------------------------------ inserir um livro na tabela
-def inserir_livro(titulo: str, data_lancamento: str, id_editora: int): ## apenas para ADMIN
+def inserir_livro(titulo: str, data_lancamento: str, id_editora: int, valor_unitario: float): ## apenas para ADMIN
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO livros (titulo, data_lancamento, id_editora) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (titulo, data_lancamento, id_editora)) #necessário adicionar verificação da existência da editora
+        sql = "INSERT INTO livros (titulo, data_lancamento, id_editora) VALUES (%s, %s, %s, %s) RETURNING id_livro"
+        cursor.execute(sql, (titulo, data_lancamento, id_editora, valor_unitario)) #necessário adicionar verificação da existência da editora
+        id_livro = cursor.fetchone()[0]
         conn.commit()
-        print("Livro adicionado com sucesso!")
+        return id_livro
     except Exception as e:
         print(f"Erro ao inserir livro: {e}")
     finally:
         cursor.close()
         conn.close()
+
+def inserir_livro_sem_editora(titulo: str, data_lancamento: str, valor_unitario: float): ## apenas para ADMIN
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "INSERT INTO livros (titulo, data_lancamento, valor_unitario) VALUES (%s, %s, %s) RETURNING id_livro"
+        cursor.execute(sql, (titulo, data_lancamento, valor_unitario)) #necessário adicionar verificação da existência da editora
+        id_livro = cursor.fetchone()[0]
+        conn.commit()
+        return id_livro
+    except Exception as e:
+        print(f"Erro ao inserir livro: {e}")
+    finally:
+        cursor.close()
+        conn.close()        
 
 ## ------------------------------- retirar um livro da tabela pelo id
 def remover_livro_por_id(id_livro: int): # tirar dúvida sobre por ou não por para USER mas para ADMIN com certeza
@@ -31,7 +47,7 @@ def remover_livro_por_id(id_livro: int): # tirar dúvida sobre por ou não por p
         conn.close()
 
 ## --------------------------------------------- alterar algo em um livro
-def alterar__titulo_livro(titulo: str, id_livro: int): # apenas para ADMIN
+def alterar_titulo_livro(titulo: str, id_livro: int): # apenas para ADMIN
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
@@ -99,6 +115,19 @@ def buscar_livro_por_id(id_livro: int):
         return resultado
     except Exception as e:
         print(f"Erro ao buscar livro por id: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def inserir_autor_livro(id_livro: int, id_autor: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "INSERT INTO livro_autor(id_livro, id_autor) VALUES (%s, %s)"
+        cursor.execute(sql, (id_livro, id_autor))
+        conn.commit()
+    except Exception as e:
+        print(f"erro ao cadastrar autor do livro: {e}")
     finally:
         cursor.close()
         conn.close()
