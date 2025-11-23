@@ -43,3 +43,33 @@ def cadastrar_item_venda(id_venda: int, id_livro: int, quantidade: int):
     finally:
         cursor.close()
         conn.close()
+
+def remover_venda_por_id(id_venda: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "DELETE FROM vendas WHERE id_venda = %s"
+        cursor.execute(sql, (id_venda,))
+        conn.commit()
+    except Exception as e:
+        print(f"Erro ao deletar venda: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def possui_venda(id_venda: int) -> bool:
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT id_venda FROM vendas WHERE id_venda = %s"
+        cursor.execute(sql, (id_venda,))
+        venda = cursor.fetchone()
+        if venda:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f"Erro ao procurar por venda: {e}")
+    finally:
+        cursor.close()
+        conn.close()

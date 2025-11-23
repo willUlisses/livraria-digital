@@ -5,6 +5,10 @@ from services.livro_service import *
 from services.editoras_service import *
 from services.vendas_service import *
 from services.autores_service import *
+from exibicoes.mostrar_editoras import mostrar_editoras
+from exibicoes.mostrar_autores import mostrar_todos_autores
+from exibicoes.mostrar_livros import mostrar_livros_id_titulo, mostrar_livros_titulo, mostrar_livros_preco
+from exibicoes.mostrar_vendas import exibir_vendas
 import os
 import sys
 import time
@@ -21,7 +25,7 @@ while True:
         login_option = int(input("Informe o que quer fazer: "))
     except ValueError:
         os.system("cls")
-        print("Você 3pode informar as opções apenas com números.")
+        print("Você deve informar as opções apenas números.")
         continue    
 
     if login_option == 1:
@@ -93,8 +97,6 @@ if user_logged:
                             case 1: #-------------------------------------> Adicionar livro
                                 os.system("cls")
                                 print("Informe os seguintes dados para o cadastro do livro:")
-                                
-
                                 titulo = input("Título: ")
                                 data_lancamento = input("Data de lançamento (AAAA-MM-DD): ")
                                 try:
@@ -104,27 +106,47 @@ if user_logged:
                                     print("Você deve informar apenas valores numéricos")
                                     input("Pressione qualquer tecla para voltar ao menu...")
                                     continue
-
                                 if titulo and data_lancamento and valor_unitario:
                                     os.system("cls")
                                     tem_editora = input("O livro possui editora? [y/n]: ")
                                     if tem_editora.lower() == "y":
-                                        pass
-                                    elif tem_editora.lower() == "n":
-                                        id_livro = inserir_livro_sem_editora(titulo, data_lancamento, valor_unitario)
+                                        while True:
+                                            os.system("cls")
+                                            print("Aqui estão as editoras existentes no sistema:\n")
+                                            editoras = listar_editoras()
+                                            mostrar_editoras(editoras)
+
+                                            try:
+                                                id_editora = int(input("Informe o identificador da editora do livro: "))
+                                            except ValueError:
+                                                os.system("cls")
+
+                                            if id_editora and id_editora > 0:
+                                                editora_existe = possui_editora(id_editora)
+                                                if editora_existe:
+                                                    id_livro = inserir_livro(titulo, data_lancamento, id_editora, valor_unitario)
+                                                    break
+                                                else:
+                                                    os.system("cls")
+                                                    print("Essa editora não está cadastrada no sistema, tente novamente")
+                                                    time.sleep(2.0)
+                                                    continue
+                                            else: 
+                                                os.system("cls")
+                                                print("Você deve informar uma editora pelo menos.")
+                                                time.sleep(2.0)
+                                                continue
+
                                         os.system("cls")
-                                        print("Agora informe o autor do livro\n\nAbaixo estão listados os autores cadastrados:")
+                                        print("Agora informe o autor do livro\n")
+                                        time.sleep(1.5)
 
                                         while True:
-                                            contador_autores = 0    
                                             autores = listar_todos_autores()
                                             if autores:
                                                 os.system("cls")
-                                                for autor in autores:
-                                                    time.sleep(0.7)
-                                                    print("------------------")
-                                                    print(f"Identificador: {autor[0]} - Nome: {autor[1]}")
-                                                    print("------------------")
+                                                print("Abaixo estão listados os autores cadastrados:\n")
+                                                mostrar_todos_autores(autores)
                                             else:
                                                 os.system("cls")
                                                 print("Ainda não há autores cadastrados no sistema, cadastre pelo menos um autor.")
@@ -138,17 +160,127 @@ if user_logged:
                                                 print("Você deve informar apenas valores numéricos")
                                                 input("\nPressione qualquer tecla para voltar...")
                                                 continue
-                                            if id_autor_livro != 0:
-                                                inserir_autor_livro(id_livro, id_autor_livro)
+                                            if id_autor_livro != 0 and id_autor_livro > 0:
+                                                if tem_autor(id_autor_livro):
+                                                    inserir_autor_livro(id_livro, id_autor_livro)
+                                                    continue
+                                                else: 
+                                                    os.system("cls")
+                                                    print("Esse autor não está cadastrado no sistema, tente novamente...")
+                                                    time.sleep(2.5)
+                                                    continue
                                             else:
-                                                print("Voltando ao menu principal!")
-                                                time.sleep(2.0)
+                                                print("Você deve escolher no mínimo um autor para cadastrar o livro!")
+                                                input("\nPressione qualquer tecla para continuar...")
+                                                continue
+                                        
+                                        os.system("cls")
+                                        mais_autores = input("O livro possui mais de um autor? [Digite 'y' para confirmar ou qualquer tecla para continuar]: ")
+                                        if mais_autores.lower() == "y":
+                                            while True:
+                                                autores = listar_todos_autores()
+                                                if autores:
+                                                    os.system("cls")
+                                                    print("Abaixo estão listados os autores cadastrados:\n")
+                                                    mostrar_todos_autores(autores)
+                                               
+                                                try:
+                                                    id_autor_livro = int(input("Informe o identificador do autor do livro em questão (Digite 0 para sair): "))
+                                                    
+                                                except ValueError:
+                                                    os.system("cls")
+                                                    print("Você deve informar apenas valores numéricos")
+                                                    input("\nPressione qualquer tecla para voltar...")
+                                                    continue
+                                                if id_autor_livro != 0:
+                                                    inserir_autor_livro(id_livro, id_autor_livro)
+                                                    continue
+                                                else:
+                                                    print("Voltando ao menu...")
+                                                    input("\nPressione qualquer tecla para continuar...")
+                                                    break
+                                    elif tem_editora.lower() == "n":
+                                        id_livro = inserir_livro_sem_editora(titulo, data_lancamento, valor_unitario)
+                                        os.system("cls")
+                                        print("Agora informe o autor do livro\n")
+                                        time.sleep(1.5)
+
+                                        while True:
+                                            autores = listar_todos_autores()
+                                            if autores:
+                                                os.system("cls")
+                                                print("Abaixo estão listados os autores cadastrados:\n")
+                                                mostrar_todos_autores(autores)
+                                            else:
+                                                os.system("cls")
+                                                print("Ainda não há autores cadastrados no sistema, cadastre pelo menos um autor.")
+                                                input("\nPressione qualquer tecla para sair...")
                                                 break
+                                            try:
+                                                id_autor_livro = int(input("Informe o identificador do autor do livro em questão (Digite 0 para sair): "))
+                                                
+                                            except ValueError:
+                                                os.system("cls")
+                                                print("Você deve informar apenas valores numéricos")
+                                                input("\nPressione qualquer tecla para voltar...")
+                                                continue
+                                            if id_autor_livro != 0 and id_autor_livro > 0:
+                                                if tem_autor(id_autor_livro):
+                                                    inserir_autor_livro(id_livro, id_autor_livro)
+                                                    continue
+                                                else: 
+                                                    os.system("cls")
+                                                    print("Esse autor não está cadastrado no sistema, tente novamente...")
+                                                    time.sleep(2.5)
+                                                    continue
+                                            else:
+                                                os.system("cls")
+                                                print("Você deve escolher no mínimo um autor para cadastrar o livro!")
+                                                input("\nPressione qualquer tecla para continuar...")
+                                                continue
+                                        
+                                        os.system("cls")
+                                        mais_autores = input("O livro possui mais de um autor? [Digite 'y' para confirmar ou qualquer tecla para continuar]: ")
+
+                                        if mais_autores.lower() == "y":
+                                            while True:
+                                                autores = listar_todos_autores()
+                                                if autores:
+                                                    os.system("cls")
+                                                    print("Abaixo estão listados os autores cadastrados:\n")
+                                                    mostrar_todos_autores(autores)
+                                               
+                                                try:
+                                                    id_autor_livro = int(input("Informe o identificador do autor do livro em questão (Digite 0 para sair): "))
+                                                    
+                                                except ValueError:
+                                                    os.system("cls")
+                                                    print("Você deve informar apenas valores numéricos")
+                                                    input("\nPressione qualquer tecla para voltar...")
+                                                    continue
+                                                if id_autor_livro != 0 and id_autor_livro > 0:
+                                                    if tem_autor(id_autor_livro):
+                                                        inserir_autor_livro(id_livro, id_autor_livro)
+                                                        continue
+                                                    else: 
+                                                        os.system("cls")
+                                                        print("Esse autor não está cadastrado no sistema, tente novamente...")
+                                                        time.sleep(2.5)
+                                                        continue
+                                                else:
+                                                    os.system("cls")
+                                                    print("Voltando ao menu...")
+                                                    input("\nPressione qualquer tecla para continuar...")
+                                                    break
                                     else: 
                                         os.system("cls")
                                         print("Resposta inválida, tente o cadastro novamente")
                                         time.sleep(3)
-                                        continue    
+                                        continue
+                                    
+                                    os.system("cls")
+                                    print("Livro cadastrado com sucesso!")
+                                    input("Pressione qualquer tecla para continuar...")    
                                 else:
                                     os.system("cls")
                                     print("Você não pode deixar o título a data de lançamento nem o valor_unitario vazios, tente novamente")          
@@ -159,17 +291,12 @@ if user_logged:
                                 input("Pressione qualquer tecla para continuar...")
                                 continue
                                 
-                            case 2:
+                            case 2: # -------------------------------------- > remover livro (soft delete)
                                 os.system("cls")
                                 print("Aqui está a lista dos livros disponíveis no estoque:\n")
                                 time.sleep(0.5)
                                 livros_disponiveis = listar_todos_livros()
-                                
-                                for livro in livros_disponiveis:
-                                    time.sleep(0.7)
-                                    print("------------------")
-                                    print(f"{livro[0]} -> {livro[1]}")
-                                    print("------------------")
+                                mostrar_livros_id_titulo(livros_disponiveis)
                                 
                                 try:
                                     id_para_remover = int(input("\nInforme o identificador do livro a ser removido: "))
@@ -180,19 +307,14 @@ if user_logged:
                                     continue
                                 
                                 remover_livro_por_id(id_para_remover)
+                                time.sleep(3)
                                 continue
                            
                             case 3: #modificar titulo do livro 
                                 os.system("cls")
                                 print("Abaixo estão listados os livros do sistema: \n")
-
                                 livros_disponiveis = listar_todos_livros()
-                                
-                                for livro in livros_disponiveis:
-                                    time.sleep(0.7)
-                                    print("------------------")
-                                    print(f"Identificador {livro[0]} -> Título: {livro[1]}")
-                                    print("------------------")
+                                mostrar_livros_id_titulo(livros_disponiveis)
                                 
                                 try:
                                     id_livro_modificado = int(input("Informe o identificador do livro que deseja alterar: "))
@@ -211,13 +333,9 @@ if user_logged:
                                 titulo_do_livro = input("Informe o título do livro que deseja buscar: ")
                                 resultados = buscar_livro_por_nome(titulo_do_livro)
 
-                                print("Possíveis resultados: ")
-                                for livro in resultados:
-                                    time.sleep(0.7)
-                                    print("------------------")
-                                    print(f"Id: {livro[0]} -> Título: {livro[1]}")
-                                    print("------------------")
-
+                                print("Possíveis resultados: \n")
+                                mostrar_livros_id_titulo(resultados)
+                                
                                 input("\nPressione qualquer tecla para continuar...")
                                 continue
                             case 0:
@@ -249,17 +367,13 @@ if user_logged:
                                 cidade = input("Cidade: ")
                                 inserir_editora(nome, cidade)
                                 continue
-                            case 2:
+                            case 2: # ----------------------------------------------------------------> deletar editora (soft delete)
                                 os.system("cls") 
                                 print("Aqui estão as editoras existentes no sistema:\n")
                                 editoras_existentes = listar_editoras()
                                 time.sleep(0.7)
 
-                                for editora in editoras_existentes:
-                                    time.sleep(0.7)
-                                    print("------------------")
-                                    print(f"{editora[0]} -> {editora[1]}")
-                                    print("------------------")
+                                mostrar_editoras(editoras_existentes)
 
                                 try:
                                     id_editora_escolhida = int(input("Informe o id da editora a ser removida ou digite 0 para sair:\n"))
@@ -288,12 +402,7 @@ if user_logged:
 
                                 if editoras_no_sistema:
                                     print("Essas são as editoras presentes no sistema:\n")
-
-                                    for editora in editoras_no_sistema:
-                                        time.sleep(0.7)
-                                        print("------------------")
-                                        print(f"Id: {editora[0]} -> Nome: {editora[1]}")
-                                        print("------------------")
+                                    mostrar_editoras(editoras_no_sistema)
                                     
                                     try:
                                         id_editora_para_editar = int(input("Digite o id da editora que deseja modificar ou digite 0 para voltar ao menu: \n"))
@@ -353,7 +462,7 @@ if user_logged:
                             case 1:
                                 pass #Adicionar 
                             case 2:
-                                pass #remover 
+                                pass #remover (soft delete) 
                             case 3: 
                                 pass #modificar 
                             case 4:
@@ -380,22 +489,88 @@ if user_logged:
                             continue
                         
                         match(vendas_option):
-                            case 1:
-                                pass #Cadastrar 
+                            case 1: #--------------------------------------------------> Cadastrar Venda
+                                os.system("cls")
+                                while True:
+                                    print("Aqui está a lista dos livros disponíveis:\n")
+                                    time.sleep(0.5)
+                                    livros_disponiveis = listar_todos_livros()
+                                    
+                                    mostrar_livros_preco(livros_disponiveis)
+                                    
+                                    try:
+                                        id_livro_escolhido = int(input("\nEscolha o id do livro que deseja comprar ou digite 0 para voltar ao menu:\n"))
+                                        if id_livro_escolhido != 0 and id_livro_escolhido > 0:
+                                            os.system("cls")
+                                            livro_escolhido = buscar_livro_por_id(id_livro_escolhido)
+                                            if livro_escolhido:
+                                                print(f"O livro escolhido foi: {livro_escolhido[1]}\n")
+                                                quantidade = int(input("Informe quantas cópias deseja comprar: "))
+                                            else:
+                                                os.system("cls")
+                                                print("Esse livro não está cadastrado no sistema, tente novamente")
+                                                time.sleep(2.5)
+                                                continue
+                                        else:
+                                            os.system("cls")
+                                            print("\nVoltando ao menu inicial...")
+                                            time.sleep(1.5)
+                                            break
+                                    except ValueError:
+                                        os.system("cls")
+                                        print("Você deve digitar apenas valores numéricos.")
+                                        continue
+                                    valor_total = quantidade * livro_escolhido[2]
+                                    id_venda_feita = inserir_venda(user_logged[0], date.today(), valor_total)
+                                    cadastrar_item_venda(id_venda_feita, livro_escolhido[0], quantidade) 
+                                    os.system("cls")
+                                    print("Compra finalizada com sucesso, aqui estão os dados da sua compra:\n")
+                                    print(f"Título: {livro_escolhido[1]}\nQuantidade: {quantidade}\nTotal: {valor_total}")
+                                    input("\nPressione qualquer botão para prosseguir...")                   
+                                    break 
                             case 2:
                                 os.system("cls")
                                 print("Abaixo estão as vendas cadastradas no sistema: \n")
-
                                 vendas_cadastradas = listar_vendas()
-
-                                for venda in vendas_cadastradas:
-                                    time.sleep(0.7)
-                                    print("------------------")
-                                    print(f"Identificador: {venda[0]} - Data: {venda[2]}\nCliente: {venda[1]} - Valor Total: {venda[3]}")
-                                    print("------------------")
+                                exibir_vendas(vendas_cadastradas)
                                 
                                 input("\nPressione qualquer tecla para continuar...")
                                 continue
+                            case 3: #remover uma venda junto aos seus itens venda (hard delete on cascade all com itens venda)
+                                os.system("cls")
+                                print("Abaixo estão as vendas cadastradas no sistema: \n")
+                                vendas_cadastradas = listar_vendas()
+                                exibir_vendas(vendas_cadastradas)
+
+                                try:
+                                    id_venda_removida = int(input("Informe o id da venda a ser removida ou digite 0 para sair: "))
+                                    if id_venda_removida != 0 and id_venda_removida > 0:
+                                        if possui_venda(id_venda_removida):
+                                            remover_venda_por_id(id_venda_removida)
+                                            os.system("cls")
+                                            print("Venda removida com sucesso!")
+                                            input("Pressione qualquer tecla para continuar...")
+                                            continue
+                                        else:
+                                            os.system("cls")
+                                            print("A venda a ser removida não está cadastrada no sistema, tente novamente")
+                                            time.sleep(2)
+                                            continue
+                                    elif id_venda_removida == 0:
+                                        os.system("cls")
+                                        print("Voltando ao menu anterior...")
+                                        time.sleep(2)
+                                        continue
+                                    else:
+                                        print("\nInforme um valor válido!")
+                                        time.sleep(1.5)
+                                        continue
+                                except ValueError:
+                                    os.system("cls")
+                                    print("Informe apenas valores numéricos.")
+                                    input("Pressione qualquer tecla para continuar...")
+                                    continue
+                                
                             case 0:
                                 os.system("cls")
                                 print("Voltando para o menu inicial...")
@@ -410,7 +585,7 @@ if user_logged:
                     print("Saindo do sistema:")
                     time.sleep(1.5)
                     sys.exit(0)
-        else: #para o caso de ser um usuário normal
+        else: # -------------------> para o caso de ser um usuário normal
             while True:
                 os.system("cls")
                 user_options_panel()
@@ -419,19 +594,13 @@ if user_logged:
                 except ValueError:
                     print("\nInforme apenas o número da escolha.")
                     continue
-                
                 if user_option == 1:
                     os.system("cls")
                     while True:
                         print("Aqui está a lista dos livros disponíveis:\n")
                         time.sleep(0.5)
                         livros_disponiveis = listar_todos_livros()
-                        
-                        for livro in livros_disponiveis:
-                            time.sleep(0.7)
-                            print("------------------")
-                            print(f"{livro[0]} -> {livro[1]} - R${livro[2]}")
-                            print("------------------")
+                        mostrar_livros_preco(livros_disponiveis)
                         
                         try:
                             id_livro_escolhido = int(input("\nEscolha o id do livro que deseja comprar ou digite 0 para voltar ao menu:\n"))
@@ -464,11 +633,7 @@ if user_logged:
                     resultados = buscar_livro_por_nome(titulo_de_busca)
                     if resultados:
                         print("Resultados:\n")
-                        for livro in resultados:
-                            time.sleep(0.5)
-                            print("------------------")
-                            print(f"{livro[0]} -> {livro[1]}")
-                            print("------------------")
+                        mostrar_livros_id_titulo(resultados)
                         input("\nPressione qualquer tecla para voltar ao menu...\n")
                         os.system("cls")
                     else:
@@ -481,11 +646,7 @@ if user_logged:
                     
                     if livros_cliente:
                         print("Livros da sua coleção: \n")
-                        for livro in livros_cliente:
-                            time.sleep(0.7)
-                            print("------------------")
-                            print(f"Título: {livro[0]}")
-                            print("------------------")
+                        mostrar_livros_titulo(livros_cliente)
                         input("\nPressione qualquer tecla para prosseguir...")
                         
                     else:

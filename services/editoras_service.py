@@ -77,5 +77,22 @@ def buscar_editora_por_nome(nome_editora: str):
          print(f"Erro ao buscar por editoras: {e}")
     finally:
         cursor.close()
-        conn.close()   
+        conn.close()  
+
+def possui_editora(id_editora: int) -> bool:
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT id_editora FROM editoras WHERE id_editora = %s"
+        cursor.execute(sql, (id_editora,))
+        editora = cursor.fetchone()
+        if editora:
+            return True
+        else: 
+            return False
+    except Exception as e:
+        print(f"Erro ao procurar por editora: {e}")
+    finally:
+        cursor.close()
+        conn.close() 
 

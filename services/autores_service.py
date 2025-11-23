@@ -56,3 +56,20 @@ def listar_todos_autores():
     finally:
         cursor.close()
         conn.close()
+
+def tem_autor(id_autor: int) -> bool:
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "SELECT id_autor FROM autores WHERE id_autor = %s"
+        cursor.execute(sql, (id_autor,))
+        autor = cursor.fetchone()
+        if autor:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f"Erro ao encontrar autor: {e}")
+    finally:
+        cursor.close()
+        conn.close()

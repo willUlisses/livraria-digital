@@ -5,7 +5,7 @@ def inserir_livro(titulo: str, data_lancamento: str, id_editora: int, valor_unit
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO livros (titulo, data_lancamento, id_editora) VALUES (%s, %s, %s, %s) RETURNING id_livro"
+        sql = "INSERT INTO livros (titulo, data_lancamento, id_editora, valor_unitario) VALUES (%s, %s, %s, %s) RETURNING id_livro"
         cursor.execute(sql, (titulo, data_lancamento, id_editora, valor_unitario)) #necessário adicionar verificação da existência da editora
         id_livro = cursor.fetchone()[0]
         conn.commit()

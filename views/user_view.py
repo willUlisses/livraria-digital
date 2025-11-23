@@ -9,7 +9,7 @@ def user_options_panel():
 
 def admin_option_panel():
     print("BEM VINDO!\nEscolha o que deseja modificar:\n")
-    print("1 - Livros\n2 - Editoras\n3 - Autores\n4 - Vendas\n0 - Sair do Sistema") #considerar opção para atuar com clientes
+    print("1 - Livros\n2 - Editoras\n3 - Autores\n4 - Vendas\n0 - Sair do Sistema")
 
 def admin_livros_panel():
     print("O que você deseja modificar nos livros?\n")
@@ -25,8 +25,4 @@ def admin_autores_panel():
 
 def admin_vendas_panel():
     print("O que você deseja realizar nas vendas?")
-    print("1 - Cadastrar nova venda\n2 - Listar vendas realizadas\n0 - Voltar ao inicio")
-
-def admin_clientes_panel():
-    print("O que você deseja fazer quanto aos clientes?")
-    print("1 - Buscar por Cliente\n2 - Listar compras de um cliente\n0 - Voltar ao inicio")
+    print("1 - Cadastrar nova venda\n2 - Listar vendas realizadas\n3- Remover uma venda\n0 - Voltar ao inicio")
