@@ -3,7 +3,7 @@ import psycopg2
 def criar_conexao():
     try:
         conn = psycopg2.connect(
-            dbname="livrariaCesmac_db",
+            dbname="livraria",
             user="postgres",
             password="1nvalidDB",
             host="localhost",
