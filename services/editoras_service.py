@@ -1,12 +1,10 @@
 from config.connection import criar_conexao
-from psycopg2.errors import ForeignKeyViolation
-from psycopg2.errors import IntegrityError
 
 def inserir_editora(nome: str, cidade: str):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO editoras(nome, cidade) VALUES (%s, %s)"
+        sql = "INSERT INTO editoras(nome, cidade, ativo) VALUES (%s, %s, TRUE)"
         cursor.execute(sql, (nome, cidade))
         conn.commit()
         print(f"\nEditora {nome} inserida com sucesso no banco!")
@@ -20,14 +18,9 @@ def remover_editora_por_id(id_editora: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "DELETE FROM editoras WHERE id_editora = %s"
+        sql = "UPDATE editoras SET ativo = FALSE WHERE id_editora = %s"
         cursor.execute(sql, (id_editora,))
         conn.commit()
-        print("\nEditora removida do banco com sucesso!")
-    except ForeignKeyViolation:
-        raise ForeignKeyViolation
-    except IntegrityError:
-        print("erro de integridade")
     except Exception as e:
         print(f"Erro ao remover editora: {e}")
     finally:
@@ -35,7 +28,7 @@ def remover_editora_por_id(id_editora: int):
         conn.close()
 
     
-def alterar_nome_editora(nome, id_editora):
+def alterar_nome_editora(nome: str, id_editora: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
@@ -54,7 +47,7 @@ def listar_editoras():
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT id_editora, nome FROM editoras"
+        sql = "SELECT id_editora, nome FROM editoras WHERE ativo = TRUE"
         cursor.execute(sql)
         editoras = cursor.fetchall()
         return editoras
@@ -69,7 +62,7 @@ def buscar_editora_por_nome(nome_editora: str):
     try:
         cursor = conn.cursor()
         nome_de_busca = f"%{nome_editora}%"
-        sql = "SELECT nome, cidade FROM editoras WHERE nome ILIKE %s"
+        sql = "SELECT nome, cidade FROM editoras WHERE nome ILIKE %s AND ativo = TRUE"
         cursor.execute(sql, (nome_de_busca,))
         resultados = cursor.fetchall()
         return resultados
@@ -83,7 +76,7 @@ def possui_editora(id_editora: int) -> bool:
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT id_editora FROM editoras WHERE id_editora = %s"
+        sql = "SELECT id_editora FROM editoras WHERE id_editora = %s AND ativo = TRUE"
         cursor.execute(sql, (id_editora,))
         editora = cursor.fetchone()
         if editora:

@@ -5,7 +5,7 @@ def inserir_livro(titulo: str, data_lancamento: str, id_editora: int, valor_unit
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO livros (titulo, data_lancamento, id_editora, valor_unitario) VALUES (%s, %s, %s, %s) RETURNING id_livro"
+        sql = "INSERT INTO livros (titulo, data_lancamento, id_editora, valor_unitario, disponibilidade) VALUES (%s, %s, %s, %s, TRUE) RETURNING id_livro"
         cursor.execute(sql, (titulo, data_lancamento, id_editora, valor_unitario)) #necessário adicionar verificação da existência da editora
         id_livro = cursor.fetchone()[0]
         conn.commit()
@@ -20,7 +20,7 @@ def inserir_livro_sem_editora(titulo: str, data_lancamento: str, valor_unitario:
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO livros (titulo, data_lancamento, valor_unitario) VALUES (%s, %s, %s) RETURNING id_livro"
+        sql = "INSERT INTO livros (titulo, data_lancamento, valor_unitario, disponibilidade) VALUES (%s, %s, %s, TRUE) RETURNING id_livro"
         cursor.execute(sql, (titulo, data_lancamento, valor_unitario)) #necessário adicionar verificação da existência da editora
         id_livro = cursor.fetchone()[0]
         conn.commit()
@@ -36,7 +36,7 @@ def remover_livro_por_id(id_livro: int): # tirar dúvida sobre por ou não por p
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "DELETE FROM livros WHERE id_livro = %s"
+        sql = "UPDATE livros SET disponibilidade = FALSE WHERE id_livro = %s"
         cursor.execute(sql, (id_livro,))
         conn.commit()
         print("Livro removido com sucesso!")
@@ -66,7 +66,7 @@ def listar_todos_livros(): # tanto pra USER quanto pra ADMIN
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT id_livro, titulo, valor_unitario FROM livros" 
+        sql = "SELECT id_livro, titulo, valor_unitario FROM livros WHERE disponibilidade = TRUE" 
         cursor.execute(sql)
         livros = cursor.fetchall()
         return livros
@@ -95,7 +95,7 @@ def buscar_livro_por_nome(titulo: str) -> str:
     try:
         cursor = conn.cursor()
         titulo_busca = f"%{titulo}%"
-        sql = "SELECT l.id_livro, l.titulo FROM livros l WHERE l.titulo ILIKE %s"
+        sql = "SELECT l.id_livro, l.titulo FROM livros l WHERE l.titulo ILIKE %s AND l.disponibilidade = TRUE"
         cursor.execute(sql, (titulo_busca,))
         resultados = cursor.fetchall()
         return resultados
@@ -109,7 +109,7 @@ def buscar_livro_por_id(id_livro: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT l.id_livro, l.titulo, l.valor_unitario  FROM livros l WHERE l.id_livro = %s"
+        sql = "SELECT l.id_livro, l.titulo, l.valor_unitario FROM livros l WHERE l.id_livro = %s AND l.disponibilidade = TRUE"
         cursor.execute(sql, (id_livro,))
         resultado = cursor.fetchone()
         return resultado

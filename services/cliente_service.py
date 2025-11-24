@@ -1,12 +1,12 @@
 from config.connection import criar_conexao
 
 #-------------------------------- Registrar novo Cliente
-def registrar(email: str, senha: str, telefone: str):
+def registrar(email: str, senha: str):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO clientes (email, senha, telefone) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (email, senha, telefone))
+        sql = "INSERT INTO clientes (email, senha) VALUES (%s, %s)"
+        cursor.execute(sql, (email, senha))
         conn.commit()
         print(f"Cliente com email: {email} registrado com sucesso")
     except Exception as e:

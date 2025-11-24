@@ -4,7 +4,7 @@ def inserir_autor(nome: str, nacionalidade: str):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO autores (nome, nacionalidade) VALUES (%s, %s)"
+        sql = "INSERT INTO autores (nome, nacionalidade, ativo) VALUES (%s, %s, TRUE)"
         cursor.execute(sql, (nome, nacionalidade))
         conn.commit()
         print(f"\nO autor {nome} foi inserido com sucesso no banco!")
@@ -18,7 +18,7 @@ def remover_autor_por_id(id_autor: int):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "DELETE FROM autores WHERE id_autor = %s"
+        sql = "UPDATE autores SET ativo = FALSE WHERE id_autor = %s"
         cursor.execute(sql, (id_autor,))
         conn.commit()
         print("\nAutor removido do banco com sucesso!")
@@ -33,7 +33,7 @@ def buscar_autor_por_nome(nome_autor: str) -> str:
     try:
         cursor = conn.cursor()
         nome_busca = f"%{nome_autor}%"
-        sql = "SELECT a.nome FROM autores a WHERE nome ILIKE %s"
+        sql = "SELECT a.nome FROM autores a WHERE nome ILIKE %s AND a.ativo = TRUE"
         cursor.execute(sql, (nome_busca,))
         resultados = cursor.fetchone()
         return resultados
@@ -47,7 +47,7 @@ def listar_todos_autores():
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT id_autor, nome FROM autores"
+        sql = "SELECT id_autor, nome FROM autores WHERE ativo = TRUE"
         cursor.execute(sql)
         autores = cursor.fetchall()
         return autores
@@ -61,7 +61,7 @@ def tem_autor(id_autor: int) -> bool:
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
-        sql = "SELECT id_autor FROM autores WHERE id_autor = %s"
+        sql = "SELECT id_autor FROM autores WHERE id_autor = %s AND ativo = TRUE"
         cursor.execute(sql, (id_autor,))
         autor = cursor.fetchone()
         if autor:
