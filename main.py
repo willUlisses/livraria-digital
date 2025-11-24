@@ -34,14 +34,13 @@ while True:
         print("Informe seus dados\n")
         email = input("Email: ")
         senha = pwinput("Senha: ")
-        telefone = input("Telefone: ")
         ja_existe = valida_registro(email)
 
         if ja_existe:
             print(f"\nO email {email} já está cadastrado\n")
             continue
 
-        registrar(email, senha, telefone)
+        registrar(email, senha)
        
         os.system("cls")
         print("Agora faça o login com suas credenciais")
@@ -291,7 +290,7 @@ if user_logged:
                                 input("Pressione qualquer tecla para continuar...")
                                 continue
                                 
-                            case 2: # -------------------------------------- > remover livro (soft delete)
+                            case 2: # -------------------------------------- > remover livro (trocar para soft delete)
                                 os.system("cls")
                                 print("Aqui está a lista dos livros disponíveis no estoque:\n")
                                 time.sleep(0.5)
@@ -382,15 +381,9 @@ if user_logged:
                                     print("Você deve digitar apenas valores númericos")
                                     continue
                                 if id_editora_escolhida != 0:
-                                    try:
-                                        remover_editora_por_id(id_editora_escolhida)
-                                        print("A editora foi removida com sucesso do sistema!\n")
-                                        input("Pressione qualquer tecla para continuar...")
-                                    except ForeignKeyViolation:
-                                        os.system("cls")
-                                        print("Não é possível excluir uma editora associada à um ou mais livros, tente excluir o livro primeiro!")
-                                        input("\nPressione qualquer tecla para voltar ao menu...")
-                                        continue
+                                    remover_editora_por_id(id_editora_escolhida)
+                                    print("A editora foi removida com sucesso do sistema!\n")
+                                    input("Pressione qualquer tecla para continuar...")
                                 else:
                                     os.system("cls")
                                     print("Voltando ao menu principal...")
@@ -475,6 +468,7 @@ if user_logged:
                             case _:
                                 os.system("cls")
                                 print("Digite uma opção válida.")
+                                buscar_livro_por_id()
                                 continue
                 elif admin_option == 4: # ---------------------------------------------------------------- Vendas
                     while True:
@@ -495,9 +489,7 @@ if user_logged:
                                     print("Aqui está a lista dos livros disponíveis:\n")
                                     time.sleep(0.5)
                                     livros_disponiveis = listar_todos_livros()
-                                    
                                     mostrar_livros_preco(livros_disponiveis)
-                                    
                                     try:
                                         id_livro_escolhido = int(input("\nEscolha o id do livro que deseja comprar ou digite 0 para voltar ao menu:\n"))
                                         if id_livro_escolhido != 0 and id_livro_escolhido > 0:
@@ -536,7 +528,7 @@ if user_logged:
                                 
                                 input("\nPressione qualquer tecla para continuar...")
                                 continue
-                            case 3: #remover uma venda junto aos seus itens venda (hard delete on cascade all com itens venda)
+                            case 3: #remover uma venda junto aos seus itens venda (hard delete on cascade all com itens_venda)
                                 os.system("cls")
                                 print("Abaixo estão as vendas cadastradas no sistema: \n")
                                 vendas_cadastradas = listar_vendas()
