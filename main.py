@@ -6,7 +6,7 @@ from services.editoras_service import *
 from services.vendas_service import *
 from services.autores_service import *
 from exibicoes.mostrar_editoras import mostrar_editoras
-from exibicoes.mostrar_autores import mostrar_todos_autores
+from exibicoes.mostrar_autores import mostrar_todos_autores, mostrar_autores_buscados
 from exibicoes.mostrar_livros import mostrar_livros_id_titulo, mostrar_livros_titulo, mostrar_livros_preco
 from exibicoes.mostrar_vendas import exibir_vendas
 import os
@@ -162,7 +162,7 @@ if user_logged:
                                             if id_autor_livro != 0 and id_autor_livro > 0:
                                                 if tem_autor(id_autor_livro):
                                                     inserir_autor_livro(id_livro, id_autor_livro)
-                                                    continue
+                                                    break
                                                 else: 
                                                     os.system("cls")
                                                     print("Esse autor não está cadastrado no sistema, tente novamente...")
@@ -526,9 +526,13 @@ if user_logged:
                                 if nome_autor_busca:
                                     resultados = buscar_autor_por_nome(nome_autor_busca)
                                     print("Abaixo estão os possíveis resultados: \n")
-                                    mostrar_todos_autores(resultados)
 
-                                    input("Pressione qualquer tecla para continaur")
+                                    if resultados:
+                                        mostrar_autores_buscados(resultados)
+                                    else:
+                                        print("Nenhum autor corresponde à sua pesquisa.")
+
+                                    input("\nPressione qualquer tecla para continuar")
                                     continue
                                 else:
                                     print("Você deve informar no mínimo uma letra para que a pesquisa seja bem sucedida.")

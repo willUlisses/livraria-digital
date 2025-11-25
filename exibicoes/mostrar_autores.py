@@ -8,4 +8,8 @@ def mostrar_todos_autores(autores):
         print("------------------")
 
 def mostrar_autores_buscados(autores):
-    pass
+    for autor in autores:
+        time.sleep(0.7)
+        print("------------------")
+        print(f"Nome: {autor[0]}")
+        print("------------------")

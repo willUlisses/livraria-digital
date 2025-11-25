@@ -35,7 +35,7 @@ def buscar_autor_por_nome(nome_autor: str) -> str:
         nome_busca = f"%{nome_autor}%"
         sql = "SELECT a.nome FROM autores a WHERE nome ILIKE %s AND a.ativo = TRUE"
         cursor.execute(sql, (nome_busca,))
-        resultados = cursor.fetchone()
+        resultados = cursor.fetchall()
         return resultados
     except Exception as e:
         print(f"Não foi possível buscar por autor: {e}")

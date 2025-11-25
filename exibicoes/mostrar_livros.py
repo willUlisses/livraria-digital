@@ -4,7 +4,7 @@ def mostrar_livros_id_titulo(livros):
     for livro in livros:
         time.sleep(0.7)
         print("------------------")
-        print(f"ID:{livro[0]} -> Título: {livro[1]}")
+        print(f"ID: {livro[0]} -> Título: {livro[1]}")
         print("------------------")
 
 def mostrar_livros_titulo(livros):
