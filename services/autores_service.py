@@ -57,6 +57,19 @@ def listar_todos_autores():
         cursor.close()
         conn.close()
 
+def modificar_nome_autor(nome: str, id_autor: int):
+    conn = criar_conexao()
+    try:
+        cursor = conn.cursor()
+        sql = "UPDATE autores SET nome = %s WHERE id_autor = %s"
+        cursor.execute(sql, (nome, id_autor))
+        conn.commit()
+    except Exception as e:
+        print(f"Erro ao modificar nome do autor: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
 def tem_autor(id_autor: int) -> bool:
     conn = criar_conexao()
     try:
@@ -73,3 +86,4 @@ def tem_autor(id_autor: int) -> bool:
     finally:
         cursor.close()
         conn.close()
+

@@ -1,12 +1,15 @@
 from config.connection import criar_conexao
+from config.criptografia import criptografar, read_pass
 
 #-------------------------------- Registrar novo Cliente
 def registrar(email: str, senha: str):
     conn = criar_conexao()
     try:
         cursor = conn.cursor()
+
+        senha_criptografada = criptografar(senha)
         sql = "INSERT INTO clientes (email, senha) VALUES (%s, %s)"
-        cursor.execute(sql, (email, senha))
+        cursor.execute(sql, (email, senha_criptografada))
         conn.commit()
         print(f"Cliente com email: {email} registrado com sucesso")
     except Exception as e:
@@ -20,10 +23,13 @@ def login(email: str, senha: str):
     try:
         conn = criar_conexao()
         cursor = conn.cursor()
-        sql = "SELECT * FROM clientes WHERE email=%s AND senha=%s"
-        cursor.execute(sql, (email, senha))
+        sql = "SELECT * FROM clientes WHERE email = %s"
+        cursor.execute(sql, (email,))
         cliente = cursor.fetchone()
-        return cliente
+        if cliente and read_pass(senha, bytes(cliente[2])):
+            return cliente
+        else:
+            return None
     except Exception as e:
         print(f"Erro ao logar na conta: {e}")
     finally:

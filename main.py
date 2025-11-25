@@ -13,13 +13,11 @@ import os
 import sys
 import time
 from datetime import date
-from psycopg2.errors import ForeignKeyViolation
-
-
 
 user_logged = None
 
 while True:
+    os.system("cls")
     login_user_panel()
     try:
         login_option = int(input("Informe o que quer fazer: "))
@@ -37,11 +35,13 @@ while True:
         ja_existe = valida_registro(email)
 
         if ja_existe:
+            os.system("cls")
             print(f"\nO email {email} já está cadastrado\n")
+            time.sleep(1.5)
             continue
 
         registrar(email, senha)
-       
+        time.sleep(5)
         os.system("cls")
         print("Agora faça o login com suas credenciais")
         time.sleep(1)
@@ -54,7 +54,7 @@ while True:
         user_logged = login(email, senha)
         os.system("cls")
         break
-    elif login_option == 3:
+    elif login_option == 0:
         os.system("cls")
         print("Encerrando o sistema...")
         time.sleep(3)
@@ -453,13 +453,87 @@ if user_logged:
                             
                         match(autores_option):
                             case 1:
-                                pass #Adicionar 
+                                os.system("cls")
+                                print("Informe os seguintes dados para cadastrar um novo autor no sistema: ")
+                                nome_autor = input("Nome: ")
+                                nacionalidade_autor = input("Nacionalidade [Pressione Enter caso não queria informar]: ")
+                                if nome_autor:
+                                    inserir_autor(nome_autor, nacionalidade_autor)
+                                    print("Autor inserido com sucesso! voltando ao menu...")
+                                    time.sleep(2)
+                                    continue
+                                else:
+                                    os.system("cls")
+                                    print("Você deve inserir no mínimo o nome do autor para cadastrá-lo")
+                                    input("\nPressione qualquer tecla para continuar...")
+                                    continue
                             case 2:
-                                pass #remover (soft delete) 
+                                os.system("cls")
+                                print("Abaixo estão listados os autores cadastrados no sistema:")
+                                autores_ativos = listar_todos_autores()
+                                mostrar_todos_autores(autores_ativos) 
+                                try:
+                                    id_autor_removido = int(input("Informe o id do autor para remover: "))
+                                except ValueError:
+                                    os.system("cls")
+                                    print("Você deve informar apenas valores numéricos.")
+                                    input("\nPressione qualquer tecla para continuar...")
+                                    continue  
+
+                                if id_autor_removido and id_autor_removido > 0:
+                                        if tem_autor(id_autor_removido):
+                                            remover_autor_por_id(id_autor_removido)
+                                            print("Autor removido com sucesso! voltando ao menu...")
+                                            time.sleep(2)
+                                            continue
+                                        else:
+                                            os.system("cls")
+                                            print(f"O autor com ID {id_autor_removido} não está cadastrado no sistema, tente novamente")  
+                                            time.sleep(2)
+                                            continue                                  
                             case 3: 
-                                pass #modificar 
+                                os.system("cls")
+                                print("Abaixo estão listados os autores cadastrados no sistema:")
+                                autores_ativos = listar_todos_autores()
+                                mostrar_todos_autores(autores_ativos)
+                                try:
+                                    id_autor_modificado = int(input("Informe o ID do autor que deseja modificar: "))
+                                except ValueError:
+                                    os.system("cls")
+                                    print("Você deve informar apenas valores numéricos")
+                                    input("\nPressione qualquer tecla para continuar")
+                                    continue
+
+                                if id_autor_modificado and id_autor_modificado > 0:
+                                    if tem_autor(id_autor_modificado):
+                                        os.system("cls")
+                                        novo_nome_autor = input("Informe o novo nome do autor: ")                                        
+                                        modificar_nome_autor(novo_nome_autor, id_autor_modificado)
+                                        print(f"Nome do autor de ID {id_autor_modificado} modificado para: {novo_nome_autor}")
+                                        time.sleep(2.5)
+                                        continue
+                                    else:
+                                        os.system("cls")
+                                        print("Esse autor não está cadastrado no sistema, tente novamente...")
+                                        input("\nPressione qualquer tecla para continuar...")
+                                        continue
                             case 4:
-                                pass #buscar por nome
+                                os.system("cls")
+                                print("Informe o nome do autor para pesquisar")
+                                nome_autor_busca = input("Pesquisar: ")
+
+                                os.system("cls")
+                                if nome_autor_busca:
+                                    resultados = buscar_autor_por_nome(nome_autor_busca)
+                                    print("Abaixo estão os possíveis resultados: \n")
+                                    mostrar_todos_autores(resultados)
+
+                                    input("Pressione qualquer tecla para continaur")
+                                    continue
+                                else:
+                                    print("Você deve informar no mínimo uma letra para que a pesquisa seja bem sucedida.")
+                                    input("\nPressione qualquer tecla para continuar...")
+                                    continue
                             case 0:
                                 os.system("cls")
                                 print("Voltando para o menu inicial...")
@@ -468,7 +542,7 @@ if user_logged:
                             case _:
                                 os.system("cls")
                                 print("Digite uma opção válida.")
-                                buscar_livro_por_id()
+                                time.sleep(1.5)
                                 continue
                 elif admin_option == 4: # ---------------------------------------------------------------- Vendas
                     while True:
